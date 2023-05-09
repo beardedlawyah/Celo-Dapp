@@ -1,5 +1,7 @@
 # Celo-Dapp: A simple DApp for a decentralized marketplace on Celo using Solidity and Truffle.
 
+##  Introduction
+In this tutorial, we will build a simple DApp for a decentralized marketplace on the Celo blockchain using Solidity and Truffle. We will cover the process of setting up the development environment, writing the smart contract, compiling and deploying the smart contract to the blockchain, and building a frontend to interact with the smart contract.
 
 ## Table of Contents
 
@@ -10,6 +12,9 @@
   - [Prerequisites](#prerequisites)
   - [Requirements](#requirements)
   - [Setting Up the Development Environment](#setting-up-the-development-environment)
+  - [Writing the Smart Contract](#Writing-the-Smart-Contract)
+  - [Compiling and Deploying the Smart Contract](#compiling-and-deploying-the-smart-contract)
+  - [Conclusion](#conclusion)
 
 ## Objective 
 The objective of this tutorial is to provide a step-by-step guide on how to build a simple DApp for a decentralized marketplace on the Celo blockchain, using Solidity and Truffle. The tutorial assumes a good understanding of Solidity and basic command line proficiency. The tutorial will cover the process of setting up the development environment, writing the smart contract, compiling and deploying the smart contract to the blockchain, and building a frontend to interact with the smart contract. By the end of this tutorial, the reader will have a basic understanding of how to build and deploy a DApp on the Celo blockchain using Solidity and Truffle.
@@ -60,11 +65,11 @@ truffle init
 ```
 This command creates a new Truffle project with the basic structure for a DApp. The project has a contracts directory for Solidity smart contracts, a migrations directory for deploying the contracts to the blockchain, a test directory for testing the contracts, and a truffle-config.js file for configuring Truffle.
 
-### Writing the Smart Contract
+## Writing the Smart Contract
 
 Our DApp will be a simple marketplace, where users can buy and sell items. Let's start by writing the smart contract. In your contracts directory, create a new file called Marketplace.sol:
 
-``` 
+``` solidity
 pragma solidity ^0.8.0;
 
 contract Marketplace {
