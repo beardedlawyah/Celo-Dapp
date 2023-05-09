@@ -70,39 +70,158 @@ This command creates a new Truffle project with the basic structure for a DApp. 
 Our DApp will be a simple marketplace, where users can buy and sell items. Let's start by writing the smart contract. In your contracts directory, create a new file called Marketplace.sol:
 
 ``` solidity
+/**
+
+ * @title Marketplace
+
+ * @dev A smart contract for buying and selling items.
+
+ */
+
 pragma solidity ^0.8.0;
 
 contract Marketplace {
+
+    /**
+
+     * @dev Represents an item for sale.
+
+     * @param name The name of the item.
+
+     * @param description The description of the item.
+
+     * @param price The price of the item in Ether.
+
+     * @param sold Whether the item has been sold or not.
+
+     * @param seller The address of the seller.
+
+     * @param buyer The address of the buyer, if the item has been sold.
+
+     */
+
     struct Item {
+
         string name;
+
         string description;
+
         uint256 price;
+
         bool sold;
+
         address payable seller;
+
         address payable buyer;
+
     }
+
+    /**
+
+     * @dev A mapping of item IDs to their corresponding items.
+
+     */
 
     mapping(uint256 => Item) public items;
+
+    /**
+
+     * @dev The number of items in the marketplace.
+
+     */
+
     uint256 public itemCount;
 
+    /**
+
+     * @dev Event emitted when an item is added to the marketplace.
+
+     * @param itemId The ID of the item.
+
+     * @param name The name of the item.
+
+     * @param description The description of the item.
+
+     * @param price The price of the item in Ether.
+
+     * @param seller The address of the seller.
+
+     */
+
     event ItemAdded(uint256 indexed itemId, string name, string description, uint256 price, address indexed seller);
+
+    /**
+
+     * @dev Event emitted when an item is sold.
+
+     * @param itemId The ID of the item.
+
+     * @param seller The address of the seller.
+
+     * @param buyer The address of the buyer.
+
+     */
+
     event ItemSold(uint256 indexed itemId, address indexed seller, address indexed buyer);
 
+    /**
+
+     * @dev Adds an item to the marketplace.
+
+     * @param _name The name of the item.
+
+     * @param _description The description of the item.
+
+     * @param _price The price of the item in Ether.
+
+     */
+
     function addItem(string memory _name, string memory _description, uint256 _price) public {
+
+        require(bytes(_name).length > 0, "Name cannot be empty");
+
+        require(bytes(_description).length > 0, "Description cannot be empty");
+
+        require(_price > 0, "Price must be greater than zero");
+
         items[itemCount] = Item(_name, _description, _price, false, payable(msg.sender), address(0));
+
         emit ItemAdded(itemCount, _name, _description, _price, msg.sender);
+
         itemCount++;
+
     }
 
+    /**
+
+     * @dev Buys an item from the marketplace.
+
+     * @param _itemId The ID of the item to buy.
+
+     */
+
     function buyItem(uint256 _itemId) public payable {
+
         Item storage item = items[_itemId];
+
+        require(item.seller != address(0), "Item does not exist");
+
         require(!item.sold, "Item already sold");
+
+        require(msg.sender != item.seller, "Seller cannot buy their own item");
+
         require(msg.value >= item.price, "Not enough funds");
+
         item.sold = true;
+
         item.buyer = payable(msg.sender);
+
         item.seller.transfer(item.price);
+
         emit ItemSold(_itemId, item.seller, msg.sender);
+
     }
+
 }
 ```
 In this smart contract, we define a struct called Item to represent a marketplace item. We use a mapping to store all the items and a counter to keep track of the number of items. We also define two events to emit when an item is added or sold.
